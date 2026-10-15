@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Bình Trọng | Chuyên Viên Python & VS Code Studio Architect</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        },
+                        vscode: {
+                            bg: '#1e1e1e',
+                            sidebar: '#252526',
+                            activeTab: '#1e1e1e',
+                            inactiveTab: '#2d2d2d',
+                            border: '#3c3c3c',
+                            lineNum: '#858585',
+                            status: '#007acc',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 6s ease infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'rainbow-border': 'rainbow-border 3s linear infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 25px rgba(59, 130, 246, 0.6)' },
+                            '50%': { opacity: 0.8, boxShadow: '0 0 10px rgba(147, 51, 234, 0.3)' }
+                        },
+                        'rainbow-border': {
+                            '0%': { borderColor: '#ef4444' },
+                            '14%': { borderColor: '#f97316' },
+                            '28%': { borderColor: '#eab308' },
+                            '42%': { borderColor: '#22c55e' },
+                            '57%': { borderColor: '#06b6d4' },
+                            '71%': { borderColor: '#3b82f6' },
+                            '85%': { borderColor: '#a855f7' },
+                            '100%': { borderColor: '#ef4444' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .glass-nav {
+            background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 7-Color Rainbow Text Glow */
+        .rainbow-text {
+            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            animation: gradient-x 4s linear infinite;
+        }
+
+        .rainbow-bg {
+            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7);
+            background-size: 200% auto;
+            animation: gradient-x 4s linear infinite;
+        }
+
+        /* VS Code Theme Styles */
+        .theme-vscode-dark {
+            --editor-bg: #1e1e1e;
+            --editor-sidebar: #252526;
+            --editor-active: #1e1e1e;
+            --editor-text: #d4d4d4;
+            --editor-keyword: #569cd6;
+            --editor-string: #ce9178;
+        }
+
+        .theme-rainbow-neon {
+            --editor-bg: #0b0f19;
+            --editor-sidebar: #111827;
+            --editor-active: #1f2937;
+            --editor-text: #f3f4f6;
+            --editor-keyword: #f43f5e;
+            --editor-string: #10b981;
+        }
+
+        .theme-monokai {
+            --editor-bg: #272822;
+            --editor-sidebar: #1e1f1c;
+            --editor-active: #272822;
+            --editor-text: #f8f8f2;
+            --editor-keyword: #f92672;
+            --editor-string: #e6db74;
+        }
+
+        .theme-cyberpunk {
+            --editor-bg: #0d0221;
+            --editor-sidebar: #05010d;
+            --editor-active: #1b053a;
+            --editor-text: #00f0ff;
+            --editor-keyword: #ff0055;
+            --editor-string: #ffe600;
+        }
+
+        /* Terminal Matrix Canvas Overlay */
+        #terminal-matrix-canvas {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen overflow-x-hidden relative selection:bg-cyan-500 selection:text-white">
+
+    <!-- 2D Canvas Fireworks Layer (Background) -->
+    <canvas id="fireworksCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-20 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+        <!-- NAVIGATION HEADER -->
+        <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                
+                <!-- Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 p-[2px] shadow-lg shadow-cyan-500/30">
+                        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                            <span class="font-extrabold text-xl rainbow-text">HBT</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg sm:text-xl tracking-tight text-white flex items-center gap-2">
+                            <span id="nav-profile-name">HỒ BÌNH TRỌNG</span>
+                            <i class="fa-solid fa-circle-check text-cyan-400 text-xs" title="Verified Profile"></i>
+                        </h1>
+                        <p class="text-xs text-slate-400 font-mono flex items-center gap-1">
+                            <i class="fa-brands fa-python text-yellow-400"></i>
+                            <span id="nav-profile-role">Python Specialist & VS Code Architect</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs (SPA Navigation) -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-slate-900/60 p-1.5 rounded-2xl border border-white/10">
+                    <button onclick="switchTab('home')" id="tab-btn-home" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 text-white bg-slate-800 shadow-md border border-white/10">
+                        <i class="fa-solid fa-house text-cyan-400"></i>
+                        <span>Trang Chủ</span>
+                    </button>
+                    <button onclick="switchTab('about')" id="tab-btn-about" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/50">
+                        <i class="fa-solid fa-user text-indigo-400"></i>
+                        <span>Về Tôi</span>
+                    </button>
+                    <button onclick="switchTab('vscode')" id="tab-btn-vscode" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/50 relative">
+                        <i class="fa-solid fa-code text-blue-400"></i>
+                        <span>VS Code Studio</span>
+                        <span class="flex h-2 w-2 relative">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                        </span>
+                    </button>
+                    <button onclick="switchTab('skills')" id="tab-btn-skills" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/50">
+                        <i class="fa-solid fa-bolt text-amber-400"></i>
+                        <span>Kỹ Năng</span>
+                    </button>
+                    <button onclick="switchTab('contact')" id="tab-btn-contact" class="nav-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/50">
+                        <i class="fa-solid fa-envelope text-emerald-400"></i>
+                        <span>Liên Hệ</span>
+                    </button>
+                </nav>
+
+                <!-- Actions Right (Edit Profile & Mobile Menu Toggle) -->
+                <div class="flex items-center gap-3">
+                    <button onclick="openProfileModal()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/40 text-cyan-300 hover:text-white hover:border-cyan-400 hover:bg-cyan-500/30 transition-all text-xs sm:text-sm font-semibold shadow-lg shadow-cyan-500/10">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span class="hidden sm:inline">Chỉnh Sửa Profile</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800/80 border border-white/10 text-slate-300 hover:text-white">
+                        <i class="fa-solid fa-bars text-lg" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Drawer -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-slate-950/95 backdrop-blur-2xl px-4 py-4 space-y-2">
+                <button onclick="switchTab('home'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left font-semibold text-slate-200 hover:bg-slate-800">
+                    <i class="fa-solid fa-house text-cyan-400 w-5"></i> Trang Chủ
+                </button>
+                <button onclick="switchTab('about'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left font-semibold text-slate-200 hover:bg-slate-800">
+                    <i class="fa-solid fa-user text-indigo-400 w-5"></i> Về Tôi
+                </button>
+                <button onclick="switchTab('vscode'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left font-semibold text-slate-200 hover:bg-slate-800">
+                    <i class="fa-solid fa-code text-blue-400 w-5"></i> VS Code Studio Ultra Pro
+                </button>
+                <button onclick="switchTab('skills'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left font-semibold text-slate-200 hover:bg-slate-800">
+                    <i class="fa-solid fa-bolt text-amber-400 w-5"></i> Kỹ Năng
+                </button>
+                <button onclick="switchTab('contact'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left font-semibold text-slate-200 hover:bg-slate-800">
+                    <i class="fa-solid fa-envelope text-emerald-400 w-5"></i> Liên Hệ
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA (SPA TABS) -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+
+            <!-- TAB 1: TRANG CHỦ (HOME) -->
+            <section id="tab-content-home" class="tab-page space-y-12">
+                
+                <!-- Hero Banner Card -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl border border-white/10">
+                    <!-- Decorative Background Blurs -->
+                    <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                        
+                        <!-- Profile Avatar Column -->
+                        <div class="lg:col-span-5 flex flex-col items-center text-center">
+                            <div class="relative group">
+                                <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 blur-md opacity-80 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-rainbow-border"></div>
+                                <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-slate-900 bg-slate-900 flex items-center justify-center shadow-2xl">
+                                    <!-- Avatar SVG Graphics -->
+                                    <svg class="w-full h-full text-slate-700" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="200" height="200" fill="#0f172a"/>
+                                        <circle cx="100" cy="80" r="45" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+                                        <path d="M100 65C92 65 85 72 85 80C85 88 92 95 100 95C108 95 115 88 115 80C115 72 108 65 100 65Z" fill="#38bdf8"/>
+                                        <path d="M40 170C40 135 65 125 100 125C135 125 160 135 160 170V180H40V170Z" fill="#1e293b" stroke="#818cf8" stroke-width="3"/>
+                                    </svg>
+                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-center pb-4">
+                                        <span class="px-3 py-1 rounded-full bg-emerald-500/80 text-emerald-100 text-xs font-semibold backdrop-blur-sm border border-emerald-400/40 flex items-center gap-1.5">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-ping"></span>
+                                            Sẵn sàng kết nối 100%
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Name & Tagline under Avatar -->
+                            <div class="mt-6 space-y-2">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center justify-center gap-2">
+                                    <span class="hero-display-name">HỒ BÌNH TRỌNG</span>
+                                </h2>
+                                <p class="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-500/30 inline-block">
+                                    <i class="fa-solid fa-graduation-cap mr-1"></i> Sinh Viên Đại Học Bình Dương (BDU)
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Info & Dynamic Typing Column -->
+                        <div class="lg:col-span-7 space-y-6 text-left">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/80 border border-white/10 text-xs font-mono text-slate-300">
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                                <span>Lập Trình Viên An Giang | Sinh Năm 2007</span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <h3 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                                    Xin chào! Tôi là <br/>
+                                    <span class="rainbow-text">Hồ Bình Trọng</span>
+                                </h3>
+                                
+                                <!-- Dynamic Typing Effect -->
+                                <div class="text-lg sm:text-xl font-mono text-slate-300 h-8 flex items-center">
+                                    <span class="text-cyan-400 font-bold mr-2">&gt;</span>
+                                    <span id="typing-text" class="border-r-2 border-cyan-400 pr-1 font-semibold"></span>
+                                </div>
+                            </div>
+
+                            <p class="text-slate-300 text-base sm:text-lg leading-relaxed hero-display-bio">
+                                Đam mê kiến tạo giao diện VS Code Studio đỉnh cao, làm chủ ngôn ngữ Python và xây dựng ứng dụng web hiện đại. Tự tin giao tiếp, cởi mở và hòa nhập 100% với môi trường tập thể!
+                            </p>
+
+                            <!-- Quick Stats Grid -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
+                                <div class="glass-card p-3 rounded-2xl text-center">
+                                    <div class="text-2xl font-extrabold text-cyan-400">19</div>
+                                    <div class="text-xs text-slate-400 font-medium">Tuổi (09/07/2007)</div>
+                                </div>
+                                <div class="glass-card p-3 rounded-2xl text-center">
+                                    <div class="text-2xl font-extrabold text-emerald-400">92%</div>
+                                    <div class="text-xs text-slate-400 font-medium">Python Skill</div>
+                                </div>
+                                <div class="glass-card p-3 rounded-2xl text-center">
+                                    <div class="text-2xl font-extrabold text-purple-400">100%</div>
+                                    <div class="text-xs text-slate-400 font-medium">Giao Tiếp</div>
+                                </div>
+                                <div class="glass-card p-3 rounded-2xl text-center">
+                                    <div class="text-2xl font-extrabold text-amber-400">BDU</div>
+                                    <div class="text-xs text-slate-400 font-medium">ĐH Bình Dương</div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Action Buttons -->
+                            <div class="flex flex-wrap gap-4 pt-2">
+                                <a href="https://zalo.me/0394472945" target="_blank" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold shadow-lg shadow-cyan-500/25 transition-all duration-300 transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-comment-dots text-lg"></i>
+                                    <span>Zalo 1-Chạm (0394472945)</span>
+                                </a>
+
+                                <button onclick="switchTab('vscode')" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-white/10 text-white font-bold shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                    <i class="fa-solid fa-terminal text-cyan-400"></i>
+                                    <span>Mở VS Code Studio Pro</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Highlights Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/30">
+                            <i class="fa-brands fa-python"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white">Lập Trình Python</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Chuyên sâu xử lý thuật toán, lập trình hướng đối tượng, tự động hóa script và phân tích dữ liệu hiệu quả cao.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl border border-blue-500/30">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white">VS Code Architect</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Thiết kế giao diện IDE, tùy biến không gian làm việc VS Code Studio tối tân với phong cách UI Glassmorphism đỉnh cao.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl border border-purple-500/30">
+                            <i class="fa-solid fa-users text-xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white">Giao Tiếp 100%</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Sở trường cởi mở, tự tin trình bày ý tưởng, kết nối thành viên và hòa nhập nhanh chóng trong mọi nhóm làm việc.
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- TAB 2: VỀ TÔI (ABOUT ME) -->
+            <section id="tab-content-about" class="tab-page hidden space-y-10">
+                
+                <!-- Section Header -->
+                <div class="text-center space-y-3">
+                    <span class="px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono text-xs uppercase tracking-wider">Hồ Sơ Cá Nhân</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Hành Trình & Mục Tiêu Của <span class="rainbow-text">Hồ Bình Trọng</span></h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">Chất lượng học vấn từ Trường Đại học Bình Dương kết hợp cùng tinh thần cầu tiến và khả năng hòa nhập tuyệt vời.</p>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left: Details Card -->
+                    <div class="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-3 border-b border-white/10 pb-4">
+                            <i class="fa-solid fa-address-card text-cyan-400"></i>
+                            <span>Thông Tin Chi Tiết</span>
+                        </h3>
+
+                        <div class="space-y-4 text-sm">
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-user text-cyan-400 mr-2"></i>Họ và tên:</span>
+                                <span class="font-bold text-white hero-display-name">Hồ Bình Trọng</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-cake-candles text-amber-400 mr-2"></i>Ngày sinh:</span>
+                                <span class="font-semibold text-white profile-display-dob">09/07/2007</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-location-dot text-red-400 mr-2"></i>Quê quán:</span>
+                                <span class="font-semibold text-white profile-display-hometown">An Giang</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-graduation-cap text-indigo-400 mr-2"></i>Học vấn:</span>
+                                <span class="font-semibold text-cyan-300 text-right profile-display-education">Trường ĐH Bình Dương (BDU)</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-envelope text-emerald-400 mr-2"></i>Email:</span>
+                                <span class="font-mono text-slate-200 text-xs profile-display-email">hobinhtrong168@gmail.com</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/50 border border-white/5">
+                                <span class="text-slate-400"><i class="fa-solid fa-phone text-emerald-400 mr-2"></i>SĐT / Zalo:</span>
+                                <span class="font-mono text-cyan-400 font-bold profile-display-phone">0394472945</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <div class="p-4 rounded-2xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/30 space-y-2">
+                                <h4 class="font-bold text-purple-300 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-star text-amber-400"></i> Điểm Mạnh Nổi Bật
+                                </h4>
+                                <p class="text-slate-300 text-xs leading-relaxed profile-display-strengths">
+                                    Tự tin giao tiếp, cởi mở, hòa nhập 100% với mọi người. Dễ dàng bắt nhịp môi trường làm việc mới và truyền năng lượng tích cực cho đội ngũ.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Education Timeline & Strengths -->
+                    <div class="lg:col-span-7 space-y-6">
+                        
+                        <!-- Education Block -->
+                        <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                            <h3 class="text-2xl font-bold text-white flex items-center gap-3 border-b border-white/10 pb-4">
+                                <i class="fa-solid fa-building-columns text-indigo-400"></i>
+                                <span>Học Vấn & Định Hướng Phấn Đấu</span>
+                            </h3>
+
+                            <div class="relative pl-6 border-l-2 border-indigo-500/40 space-y-8">
+                                <!-- Timeline Item 1 -->
+                                <div class="relative">
+                                    <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-cyan-400 border-4 border-slate-950"></div>
+                                    <div class="space-y-1">
+                                        <span class="text-xs font-mono text-cyan-400">Hiện tại - Trường Đại học Bình Dương (BDU)</span>
+                                        <h4 class="text-lg font-bold text-white">Chuyên Ngành Công Nghệ Thông Tin & Lập Trình</h4>
+                                        <p class="text-slate-300 text-sm">
+                                            Rèn luyện tư duy thuật toán, cấu trúc dữ liệu, lập trình Python nâng cao, thiết kế giao diện ứng dụng và thực hành các dự án phần mềm thực tế.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Timeline Item 2 -->
+                                <div class="relative">
+                                    <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-purple-400 border-4 border-slate-950"></div>
+                                    <div class="space-y-1">
+                                        <span class="text-xs font-mono text-purple-400">Định Hướng Mục Tiêu</span>
+                                        <h4 class="text-lg font-bold text-white">Chuyên Viên Python & VS Code Studio Architect</h4>
+                                        <p class="text-slate-300 text-sm">
+                                            Trở thành chuyên gia phát triển giải pháp phần mềm trên nền tảng Python, tối ưu hóa quy trình làm việc bằng VS Code Studio và tham gia phát triển các hệ thống lớn.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Communication & Soft Skills Block -->
+                        <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-4">
+                            <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-comments text-emerald-400"></i>
+                                <span>Tinh Thần Hòa Nhập & Kỹ Năng Mềm</span>
+                            </h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Sinh ra và lớn lên tại An Giang, Hồ Bình Trọng mang tinh thần hào sảng, chất phác và luôn tràn đầy năng lượng. Khả năng **giao tiếp 100% tự tin** giúp dễ dàng thuyết trình, đàm phán, gắn kết thành viên và cùng tập thể vượt qua mọi thử thách lập trình.
+                            </p>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                                <div class="p-3 rounded-2xl bg-slate-900/60 border border-white/5 text-center">
+                                    <i class="fa-solid fa-face-smile-beam text-amber-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-bold text-white">Cởi Mở & Vui Vẻ</div>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-900/60 border border-white/5 text-center">
+                                    <i class="fa-solid fa-handshake text-emerald-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-bold text-white">Dễ Dàng Hòa Nhập</div>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-900/60 border border-white/5 text-center">
+                                    <i class="fa-solid fa-bullhorn text-cyan-400 text-lg mb-1"></i>
+                                    <div class="text-xs font-bold text-white">Thuyết Trình Tốt</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- TAB 3: TRÌNH GIẢ LẬP VS CODE STUDIO ULTRA PRO -->
+            <section id="tab-content-vscode" class="tab-page hidden space-y-4">
+                
+                <!-- IDE Header Controls -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1.5 px-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500 cursor-pointer" onclick="notify('VS Code Studio Pro Simulator')"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500 cursor-pointer" onclick="notify('Hồ Bình Trọng Edition')"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500 cursor-pointer" onclick="toggleVSCodeFullscreen()"></span>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-slate-300 flex items-center gap-2 border-l border-slate-700 pl-3">
+                            <i class="fa-solid fa-code text-blue-400"></i>
+                            <span>VS Code Studio Ultra Pro - <span class="text-cyan-400">BinhTrong OS / BDU Edition</span></span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Theme Selector Dropdown -->
+                        <select id="vscodeThemeSelect" onchange="changeVSCodeTheme(this.value)" class="bg-slate-800 text-slate-200 text-xs font-mono px-2.5 py-1.5 rounded-lg border border-white/10 focus:outline-none focus:border-cyan-400">
+                            <option value="theme-vscode-dark">Theme: VS Code Dark+</option>
+                            <option value="theme-rainbow-neon">Theme: 7-Color Rainbow Neon</option>
+                            <option value="theme-monokai">Theme: Monokai Cyber</option>
+                            <option value="theme-cyberpunk">Theme: Cyberpunk Neon</option>
+                        </select>
+
+                        <!-- Run Code Button -->
+                        <button onclick="runVSCodeScript()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold shadow-md shadow-emerald-600/30 transition-all">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Chạy Code (Run)</span>
+                        </button>
+
+                        <!-- AI Copilot Button -->
+                        <button onclick="toggleAICopilot()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-mono text-xs font-bold shadow-md shadow-purple-600/30 transition-all">
+                            <i class="fa-solid fa-robot"></i>
+                            <span class="hidden sm:inline">AI Copilot</span>
+                        </button>
+
+                        <!-- Fullscreen Toggle Button -->
+                        <button onclick="toggleVSCodeFullscreen()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN IDE WORKSPACE CONTAINER -->
+                <div id="vscodeContainer" class="theme-vscode-dark bg-[var(--editor-bg)] rounded-2xl border border-white/10 overflow-hidden shadow-2xl flex flex-col min-h-[620px] transition-all duration-300 relative">
+                    
+                    <div class="flex-grow flex flex-col md:flex-row overflow-hidden relative">
+                        
+                        <!-- Left Activity Bar -->
+                        <div class="w-12 bg-slate-950/80 border-r border-white/10 flex md:flex-col items-center justify-between p-2 z-20">
+                            <div class="flex md:flex-col items-center gap-4 text-slate-400">
+                                <button title="Explorer" class="text-cyan-400 hover:text-white"><i class="fa-regular fa-copy text-lg"></i></button>
+                                <button title="Search" class="hover:text-white" onclick="notify('Tìm kiếm file trong Workspace')"><i class="fa-solid fa-magnifying-glass text-base"></i></button>
+                                <button title="Source Control (Git)" class="hover:text-white" onclick="runTerminalCommand('git status')"><i class="fa-solid fa-code-branch text-base"></i></button>
+                                <button title="AI Copilot Assistant" class="hover:text-purple-400" onclick="toggleAICopilot()"><i class="fa-solid fa-wand-magic-sparkles text-base"></i></button>
+                            </div>
+                            <div class="flex md:flex-col items-center gap-3 text-slate-400">
+                                <button title="Cài đặt" onclick="openProfileModal()"><i class="fa-solid fa-gear text-base"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar File Explorer -->
+                        <div class="w-full md:w-56 bg-[var(--editor-sidebar)] border-r border-white/10 flex flex-col z-10 shrink-0">
+                            <div class="p-3 text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-white/5">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-folder-open text-amber-400"></i> Explorer</span>
+                                <button onclick="addNewFilePrompt()" title="Tạo File Mới" class="hover:text-white"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+
+                            <!-- File Tree List -->
+                            <div class="flex-grow overflow-y-auto p-2 space-y-1 text-xs font-mono" id="fileTreeContainer">
+                                <!-- Populated dynamically by JavaScript -->
+                            </div>
+
+                            <div class="p-3 border-t border-white/5 bg-slate-900/40 text-[11px] font-mono text-slate-400">
+                                <i class="fa-solid fa-graduation-cap text-indigo-400 mr-1"></i> BDU Workspace
+                            </div>
+                        </div>
+
+                        <!-- Code Editor Area -->
+                        <div class="flex-grow flex flex-col bg-[var(--editor-bg)] min-w-0 relative">
+                            
+                            <!-- Editor File Tabs Bar -->
+                            <div class="flex items-center bg-slate-950/60 border-b border-white/10 overflow-x-auto" id="editorTabsContainer">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Code Editor Body (Line Numbers + Textarea) -->
+                            <div class="flex-grow flex relative font-mono text-xs sm:text-sm overflow-hidden min-h-[300px]">
+                                <!-- Line Numbers Sidebar -->
+                                <div class="w-10 sm:w-12 py-3 bg-slate-950/40 text-slate-600 text-right pr-2 select-none border-r border-white/5 font-mono text-xs leading-6" id="lineNumbers">
+                                    1
+                                </div>
+
+                                <!-- Text Editor Area -->
+                                <textarea id="codeEditorTextarea" spellcheck="false" oninput="updateCodeText(this.value); updateLineNumbers();" class="flex-grow bg-transparent text-[var(--editor-text)] p-3 outline-none resize-none leading-6 font-mono border-none focus:ring-0 whitespace-pre overflow-auto" placeholder="Nhập mã lập trình ở đây..."></textarea>
+                            </div>
+
+                            <!-- Live HTML Preview Overlay Panel (If Active) -->
+                            <div id="htmlPreviewPanel" class="hidden absolute inset-0 bg-slate-900 z-30 flex flex-col">
+                                <div class="p-2 bg-slate-950 border-b border-white/10 flex items-center justify-between">
+                                    <span class="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2">
+                                        <i class="fa-solid fa-globe"></i> HTML Live Web Preview
+                                    </span>
+                                    <button onclick="closeHTMLPreview()" class="text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 text-xs">
+                                        Đóng Xem Trước (Esc)
+                                    </button>
+                                </div>
+                                <iframe id="htmlPreviewIframe" class="w-full flex-grow bg-white border-none"></iframe>
+                            </div>
+
+                        </div>
+
+                        <!-- AI Copilot Drawer (Side Panel inside IDE) -->
+                        <div id="aiCopilotDrawer" class="hidden w-full md:w-80 bg-slate-900/95 border-l border-white/10 flex flex-col z-20 shrink-0">
+                            <div class="p-3 bg-purple-950/60 border-b border-white/10 flex items-center justify-between">
+                                <span class="text-xs font-bold text-purple-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-robot text-purple-400"></i> AI Copilot Assistant
+                                </span>
+                                <button onclick="toggleAICopilot()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+
+                            <!-- Chat History -->
+                            <div id="aiChatHistory" class="flex-grow p-3 space-y-3 overflow-y-auto text-xs font-sans">
+                                <div class="p-3 rounded-2xl bg-purple-900/20 border border-purple-500/30 text-purple-200">
+                                    👋 **Xin chào Hồ Bình Trọng!** Tôi là AI Copilot trong VS Code. Tôi có thể giúp bạn giải thích code, sửa lỗi, hoặc tạo đoạn mã Python mới!
+                                </div>
+                            </div>
+
+                            <!-- AI Presets & Input -->
+                            <div class="p-3 border-t border-white/10 space-y-2">
+                                <div class="flex flex-wrap gap-1">
+                                    <button onclick="askAIPreset('explain')" class="px-2 py-1 rounded bg-slate-800 text-[10px] text-cyan-300 hover:bg-slate-700">Giải thích Code</button>
+                                    <button onclick="askAIPreset('generate')" class="px-2 py-1 rounded bg-slate-800 text-[10px] text-emerald-300 hover:bg-slate-700">Tạo hàm Python</button>
+                                    <button onclick="askAIPreset('fix')" class="px-2 py-1 rounded bg-slate-800 text-[10px] text-amber-300 hover:bg-slate-700">Kiểm tra lỗi</button>
+                                </div>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="aiInputText" onkeydown="if(event.key === 'Enter') sendAICopilotMessage()" placeholder="Hỏi AI bất kỳ điều gì..." class="flex-grow bg-slate-950 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 outline-none focus:border-purple-500">
+                                    <button onclick="sendAICopilotMessage()" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg"><i class="fa-solid fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BOTTOM PANEL: INTERACTIVE TERMINAL & OUTPUT -->
+                    <div class="h-64 bg-slate-950 border-t border-white/10 flex flex-col relative overflow-hidden">
+                        
+                        <!-- Terminal Tabs Header -->
+                        <div class="flex items-center justify-between bg-slate-900 px-3 py-1.5 border-b border-white/10 text-xs font-mono">
+                            <div class="flex items-center space-x-4">
+                                <button onclick="switchTerminalTab('terminal')" id="term-tab-btn-terminal" class="text-cyan-400 font-bold border-b-2 border-cyan-400 pb-0.5 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-terminal"></i> Terminal (Bash)
+                                </button>
+                                <button onclick="switchTerminalTab('output')" id="term-tab-btn-output" class="text-slate-400 hover:text-slate-200 pb-0.5 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-receipt"></i> Program Output
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-400 text-xs">
+                                <button onclick="runTerminalCommand('clear')" title="Xóa màn hình"><i class="fa-solid fa-ban"></i></button>
+                                <button onclick="runTerminalCommand('help')" title="Trợ giúp lệnh"><i class="fa-solid fa-circle-question"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Terminal Body Area -->
+                        <div id="terminalBody" class="flex-grow p-3 font-mono text-xs overflow-y-auto space-y-1 relative bg-slate-950 text-slate-200">
+                            <!-- Matrix digital rain canvas inside terminal -->
+                            <canvas id="terminal-matrix-canvas"></canvas>
+
+                            <div class="text-slate-400 italic">
+                                VS Code Studio Terminal [BinhTrong OS Shell v2026]
+                                Gõ <span class="text-cyan-400 font-bold">'help'</span> để xem danh sách câu lệnh Terminal thực tế.
+                            </div>
+
+                            <!-- Terminal Logs Buffer -->
+                            <div id="terminalLogContainer" class="space-y-1"></div>
+
+                            <!-- Interactive Input Line -->
+                            <div class="flex items-center gap-2 pt-1" id="terminalInputLine">
+                                <span class="text-emerald-400 font-bold">binhtrong@BDU-studio:~$</span>
+                                <input type="text" id="terminalInput" autocomplete="off" spellcheck="false" onkeydown="handleTerminalKeyDown(event)" class="flex-grow bg-transparent outline-none border-none focus:ring-0 text-slate-100 font-mono text-xs p-0">
+                            </div>
+                        </div>
+
+                        <!-- Output Body Area (Hidden by default) -->
+                        <div id="outputBody" class="hidden flex-grow p-3 font-mono text-xs overflow-y-auto space-y-1 bg-slate-950 text-slate-300">
+                            <div class="text-slate-500">[Program execution logs will appear here when you click 'Run Code']</div>
+                        </div>
+
+                    </div>
+
+                    <!-- IDE Status Bar -->
+                    <div class="bg-[var(--vscode-status,#007acc)] px-3 py-1 flex items-center justify-between text-[11px] font-mono text-white select-none">
+                        <div class="flex items-center space-x-4">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-code-branch"></i> main*</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> 0</span>
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> 0</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span id="statusBarLanguage">Python 3.12</span>
+                            <span>UTF-8</span>
+                            <span>Ln 1, Col 1</span>
+                            <span class="hidden sm:inline">Trường ĐH Bình Dương</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- TAB 4: KỸ NĂNG (SKILLS) -->
+            <section id="tab-content-skills" class="tab-page hidden space-y-10">
+                
+                <div class="text-center space-y-3">
+                    <span class="px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono text-xs uppercase tracking-wider">Năng Lực & Kỹ Năng</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Bộ Kỹ Năng Của <span class="rainbow-text">Hồ Bình Trọng</span></h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">Sự kết hợp hoàn hảo giữa năng lực lập trình Python chuyên sâu và khả năng giao tiếp cởi mở 100%.</p>
+                </div>
+
+                <!-- Skill Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Technical Skills -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-3 border-b border-white/10 pb-4">
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                            <span>Kỹ Năng Lập Trình & Công Nghệ</span>
+                        </h3>
+
+                        <!-- Skill Item 1: Python -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-brands fa-python text-yellow-400 text-lg"></i> Python Programming Specialist
+                                </span>
+                                <span class="text-yellow-400 font-mono">92%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full bg-gradient-to-r from-yellow-500 to-amber-400 rounded-full transition-all duration-1000" style="width: 92%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Cấu trúc dữ liệu, OOP, giải thuật, xử lý file và tự động hóa script Python.</p>
+                        </div>
+
+                        <!-- Skill Item 2: VS Code Design -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-laptop-code text-blue-400 text-lg"></i> VS Code Studio UI & Architecture
+                                </span>
+                                <span class="text-blue-400 font-mono">95%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-1000" style="width: 95%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Tùy biến IDE, thiết kế theme Glassmorphism, quản lý Workspace hiệu quả.</p>
+                        </div>
+
+                        <!-- Skill Item 3: HTML / CSS / JavaScript -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-brands fa-html5 text-orange-400 text-lg"></i> Web Development (HTML/CSS/JS)
+                                </span>
+                                <span class="text-orange-400 font-mono">90%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-1000" style="width: 90%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Xây dựng giao diện Web responsive, Tailwind CSS, SPA logic không reload.</p>
+                        </div>
+
+                        <!-- Skill Item 4: Git / GitHub -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-brands fa-git-alt text-red-400 text-lg"></i> Git & Version Control
+                                </span>
+                                <span class="text-red-400 font-mono">88%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full bg-gradient-to-r from-red-500 to-rose-400 rounded-full transition-all duration-1000" style="width: 88%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Quản lý phiên bản mã nguồn, làm việc nhánh (branches), commit & merge code.</p>
+                        </div>
+                    </div>
+
+                    <!-- Soft Skills & Strengths -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-3 border-b border-white/10 pb-4">
+                            <i class="fa-solid fa-heart-pulse text-purple-400"></i>
+                            <span>Giao Tiếp & Năng Lực Kết Nối</span>
+                        </h3>
+
+                        <!-- Skill Item 5: Communication -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-comments text-emerald-400 text-lg"></i> Tự Tin Giao Tiếp & Thuyết Trình
+                                </span>
+                                <span class="text-emerald-400 font-mono">100%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full rainbow-bg rounded-full transition-all duration-1000" style="width: 100%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Sở trường cốt lõi: Tự tin chia sẻ quan điểm, trình bày ý tưởng mạch lạc.</p>
+                        </div>
+
+                        <!-- Skill Item 6: Teamwork -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm font-bold">
+                                <span class="text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-people-group text-purple-400 text-lg"></i> Cởi Mở & Hòa Nhập Đồng Đội
+                                </span>
+                                <span class="text-purple-400 font-mono">100%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-1000" style="width: 100%;"></div>
+                            </div>
+                            <p class="text-slate-400 text-xs">Chủ động lắng nghe, gắn kết các thành viên và tạo không khí học tập tích cực.</p>
+                        </div>
+
+                        <!-- Skill Badges Grid -->
+                        <div class="pt-4 grid grid-cols-2 gap-3">
+                            <div class="p-4 rounded-2xl bg-slate-900/60 border border-white/5 space-y-1">
+                                <div class="text-cyan-400 font-bold text-sm"><i class="fa-solid fa-lightbulb mr-1"></i> Tư Duy Logic</div>
+                                <div class="text-xs text-slate-400">Phân tích bài toán nhanh chóng và tối ưu.</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/60 border border-white/5 space-y-1">
+                                <div class="text-emerald-400 font-bold text-sm"><i class="fa-solid fa-seedling mr-1"></i> Khả Năng Tự Học</div>
+                                <div class="text-xs text-slate-400">Cập nhật công nghệ mới liên tục hàng ngày.</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- TAB 5: LIÊN HỆ (CONTACT) -->
+            <section id="tab-content-contact" class="tab-page hidden space-y-10">
+                
+                <div class="text-center space-y-3">
+                    <span class="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono text-xs uppercase tracking-wider">Kết Nối 1-Chạm</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Liên Hệ Với <span class="rainbow-text">Hồ Bình Trọng</span></h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">Sẵn sàng trao đổi công việc, hợp tác dự án Python & VS Code hoặc giao lưu học tập tại BDU.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Contact Cards -->
+                    <div class="lg:col-span-5 space-y-4">
+                        
+                        <!-- Zalo Card -->
+                        <div class="glass-card p-6 rounded-3xl space-y-3 border-l-4 border-l-cyan-400">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl font-bold">
+                                        Z
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-base">Zalo Trực Tiếp</h4>
+                                        <p class="text-xs text-slate-400">Phản hồi nhanh 24/7</p>
+                                    </div>
+                                </div>
+                                <a href="https://zalo.me/0394472945" target="_blank" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/30 transition-all">
+                                    Mở Zalo
+                                </a>
+                            </div>
+                            <div class="text-lg font-mono font-extrabold text-cyan-300 profile-display-phone">
+                                0394472945
+                            </div>
+                        </div>
+
+                        <!-- Email Card -->
+                        <div class="glass-card p-6 rounded-3xl space-y-3 border-l-4 border-l-purple-400">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-base">Địa Chỉ Email</h4>
+                                        <p class="text-xs text-slate-400">Gửi thư trao đổi</p>
+                                    </div>
+                                </div>
+                                <button onclick="copyToClipboard('hobinhtrong168@gmail.com', 'Đã sao chép Email!')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-white/10 transition-all">
+                                    <i class="fa-regular fa-copy mr-1"></i> Copy
+                                </button>
+                            </div>
+                            <div class="text-sm font-mono text-purple-300 font-semibold profile-display-email">
+                                hobinhtrong168@gmail.com
+                            </div>
+                        </div>
+
+                        <!-- Location & University Card -->
+                        <div class="glass-card p-6 rounded-3xl space-y-3 border-l-4 border-l-amber-400">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Học Tập & Sinh Hoạt</h4>
+                                    <p class="text-xs text-slate-400">Trường ĐH Bình Dương (BDU) & An Giang</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Luôn sẵn sàng tham gia các buổi offline, cuộc thi lập trình Python và hoạt động phong trào sinh viên BDU.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-3 border-b border-white/10 pb-4">
+                            <i class="fa-solid fa-paper-plane text-emerald-400"></i>
+                            <span>Gửi Tin Nhắn Trực Tiếp</span>
+                        </h3>
+
+                        <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-semibold text-slate-300">Họ và Tên của bạn</label>
+                                    <input type="text" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-xs font-semibold text-slate-300">Email của bạn</label>
+                                    <input type="email" required placeholder="name@example.com" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-slate-300">Tiêu đề tin nhắn</label>
+                                <input type="text" required placeholder="Ví dụ: Hợp tác dự án Python / Giao lưu sinh viên BDU" class="w-full bg-slate-900/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-xs font-semibold text-slate-300">Nội dung tin nhắn</label>
+                                <textarea rows="4" required placeholder="Nhập nội dung tin nhắn bạn muốn gửi đến Hồ Bình Trọng..." class="w-full bg-slate-900/80 border border-white/10 rounded-2xl px-4 py-3 text-sm text-slate-100 outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/20 transition-all duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane text-base"></i>
+                                <span>Gửi Tin Nhắn Ngay</span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto border-t border-white/10 bg-slate-950/80 backdrop-blur-xl py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-slate-400 text-center sm:text-left">
+                    © 2026 <span class="font-bold text-slate-200">Hồ Bình Trọng</span>. Đại Học Bình Dương (BDU) - An Giang.
+                </div>
+                <div class="flex items-center space-x-4 text-slate-400 text-sm">
+                    <a href="https://zalo.me/0394472945" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fa-solid fa-comment-dots"></i> Zalo</a>
+                    <button onclick="copyToClipboard('hobinhtrong168@gmail.com', 'Đã chép Email!')" class="hover:text-purple-400 transition-colors"><i class="fa-solid fa-envelope"></i> Email</button>
+                    <button onclick="switchTab('vscode')" class="hover:text-blue-400 transition-colors"><i class="fa-solid fa-code"></i> VS Code Studio</button>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- FLOATING FIREWORKS CONTROL WIDGET (BOTTOM RIGHT) -->
+    <div class="fixed bottom-5 right-5 z-40 flex items-center gap-2 bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl border border-white/10 shadow-2xl">
+        <button id="fireworksToggleBtn" onclick="toggleFireworksState()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all">
+            <i class="fa-solid fa-pause text-yellow-400" id="fireworksToggleIcon"></i>
+            <span id="fireworksToggleText" class="hidden sm:inline">Tạm Dừng Pháo Hoa</span>
+        </button>
+
+        <button onclick="triggerFireworksCelebration()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl rainbow-bg hover:opacity-90 text-slate-950 font-extrabold text-xs shadow-lg transition-all animate-pulse">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Nổ Bùng Đại Tiệc!</span>
+        </button>
+    </div>
+
+    <!-- LIVE PROFILE EDITOR MODAL -->
+    <div id="profileModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 space-y-6 max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-pen text-cyan-400"></i>
+                    <span>Bộ Chỉnh Sửa Profile Hồ Bình Trọng</span>
+                </h3>
+                <button onclick="closeProfileModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form onsubmit="saveProfileChanges(event)" class="space-y-4 text-xs sm:text-sm">
+                <div class="space-y-1">
+                    <label class="font-semibold text-slate-300">Họ và Tên</label>
+                    <input type="text" id="edit-name" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="font-semibold text-slate-300">Ngày sinh</label>
+                        <input type="text" id="edit-dob" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-semibold text-slate-300">Quê quán</label>
+                        <input type="text" id="edit-hometown" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-semibold text-slate-300">Trường Học / Học Vấn</label>
+                    <input type="text" id="edit-education" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-semibold text-slate-300">Chức Danh / Định Hướng</label>
+                    <input type="text" id="edit-role" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="font-semibold text-slate-300">Email</label>
+                        <input type="email" id="edit-email" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-semibold text-slate-300">Zalo / SĐT</label>
+                        <input type="text" id="edit-phone" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-semibold text-slate-300">Sở Trường & Điểm Mạnh</label>
+                    <textarea id="edit-strengths" rows="2" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400 resize-none"></textarea>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-semibold text-slate-300">Mô Tả Bản Thân (Hero Bio)</label>
+                    <textarea id="edit-bio" rows="2" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-100 outline-none focus:border-cyan-400 resize-none"></textarea>
+                </div>
+
+                <div class="flex gap-3 pt-3 border-t border-white/10">
+                    <button type="button" onclick="resetProfileDefault()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs">Khôi Phục Mặc Định</button>
+                    <button type="submit" class="flex-grow py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-lg shadow-cyan-500/20">Lưu Thay Đổi (LocalStorage)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP ENGINE -->
+    <script>
+        /* ==========================================================================
+           1. PROFILE STATE MANAGEMENT (LOCALSTORAGE + DEFAULTS)
+           ========================================================================== */
+        const DEFAULT_PROFILE = {
+            name: "Hồ Bình Trọng",
+            dob: "09/07/2007",
+            hometown: "An Giang",
+            education: "Trường Đại học Bình Dương (BDU)",
+            role: "Chuyên viên Lập trình & Thiết kế VS Code Studio, Python Specialist",
+            email: "hobinhtrong168@gmail.com",
+            phone: "0394472945",
+            strengths: "Tự tin giao tiếp, cởi mở, hòa nhập 100% với mọi người.",
+            bio: "Đam mê kiến tạo giao diện VS Code Studio đỉnh cao, làm chủ ngôn ngữ Python và xây dựng ứng dụng web hiện đại. Tự tin giao tiếp, cởi mở và hòa nhập 100% với môi trường tập thể!"
+        };
+
+        let currentProfile = JSON.parse(localStorage.getItem('hobinhtrong_profile_data')) || { ...DEFAULT_PROFILE };
+
+        function updateProfileUI() {
+            document.querySelectorAll('.hero-display-name').forEach(el => el.textContent = currentProfile.name);
+            document.getElementById('nav-profile-name').textContent = currentProfile.name;
+            document.getElementById('nav-profile-role').textContent = currentProfile.role;
+            
+            document.querySelectorAll('.profile-display-dob').forEach(el => el.textContent = currentProfile.dob);
+            document.querySelectorAll('.profile-display-hometown').forEach(el => el.textContent = currentProfile.hometown);
+            document.querySelectorAll('.profile-display-education').forEach(el => el.textContent = currentProfile.education);
+            document.querySelectorAll('.profile-display-email').forEach(el => el.textContent = currentProfile.email);
+            document.querySelectorAll('.profile-display-phone').forEach(el => el.textContent = currentProfile.phone);
+            document.querySelectorAll('.profile-display-strengths').forEach(el => el.textContent = currentProfile.strengths);
+            document.querySelectorAll('.hero-display-bio').forEach(el => el.textContent = currentProfile.bio);
+        }
+
+        function openProfileModal() {
+            document.getElementById('edit-name').value = currentProfile.name;
+            document.getElementById('edit-dob').value = currentProfile.dob;
+            document.getElementById('edit-hometown').value = currentProfile.hometown;
+            document.getElementById('edit-education').value = currentProfile.education;
+            document.getElementById('edit-role').value = currentProfile.role;
+            document.getElementById('edit-email').value = currentProfile.email;
+            document.getElementById('edit-phone').value = currentProfile.phone;
+            document.getElementById('edit-strengths').value = currentProfile.strengths;
+            document.getElementById('edit-bio').value = currentProfile.bio;
+
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        function saveProfileChanges(e) {
+            e.preventDefault();
+            currentProfile = {
+                name: document.getElementById('edit-name').value,
+                dob: document.getElementById('edit-dob').value,
+                hometown: document.getElementById('edit-hometown').value,
+                education: document.getElementById('edit-education').value,
+                role: document.getElementById('edit-role').value,
+                email: document.getElementById('edit-email').value,
+                phone: document.getElementById('edit-phone').value,
+                strengths: document.getElementById('edit-strengths').value,
+                bio: document.getElementById('edit-bio').value
+            };
+
+            localStorage.setItem('hobinhtrong_profile_data', JSON.stringify(currentProfile));
+            updateProfileUI();
+            closeProfileModal();
+            notify('Đã cập nhật Profile Hồ Bình Trọng!');
+        }
+
+        function resetProfileDefault() {
+            currentProfile = { ...DEFAULT_PROFILE };
+            localStorage.removeItem('hobinhtrong_profile_data');
+            updateProfileUI();
+            closeProfileModal();
+            notify('Đã khôi phục Profile mặc định!');
+        }
+
+        /* ==========================================================================
+           2. SPA TABS NAVIGATION SYSTEM
+           ========================================================================== */
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+            const target = document.getElementById(`tab-content-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white', 'shadow-md', 'border', 'border-white/10');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-slate-800', 'text-white', 'shadow-md', 'border', 'border-white/10');
+                activeBtn.classList.remove('text-slate-400');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* Dynamic Typing Effect on Home Page */
+        const typingPhrases = [
+            "VS Code Studio UI & System Architect",
+            "Chuyên Viên Python Specialist (92%)",
+            "Sinh Viên Đại Học Bình Dương (BDU)",
+            "Giao Tiếp Tự Tin 100% - Cởi Mở - Hòa Nhập"
+        ];
+        let typeIdx = 0, charIdx = 0, isDeleting = false;
+
+        function runTypingLoop() {
+            const currentPhrase = typingPhrases[typeIdx];
+            const targetEl = document.getElementById('typing-text');
+            if (!targetEl) return;
+
+            if (isDeleting) {
+                targetEl.textContent = currentPhrase.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                targetEl.textContent = currentPhrase.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let speed = isDeleting ? 40 : 80;
+
+            if (!isDeleting && charIdx === currentPhrase.length) {
+                speed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                typeIdx = (typeIdx + 1) % typingPhrases.length;
+                speed = 400;
+            }
+
+            setTimeout(runTypingLoop, speed);
+        }
+
+        /* ==========================================================================
+           3. 7-COLOR RAINBOW CANVAS FIREWORKS ENGINE (CANVAS 2D)
+           ========================================================================== */
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let fireworksActive = true;
+        let particles = [];
+        let rockets = [];
+
+        // 7 Rainbow Colors (Đỏ, Cam, Vàng, Lục, Lam, Chàm, Tím)
+        const RAINBOW_COLORS = [
+            '#ef4444', // Red
+            '#f97316', // Orange
+            '#eab308', // Yellow
+            '#22c55e', // Green
+            '#06b6d4', // Cyan/Blue
+            '#3b82f6', // Indigo
+            '#a855f7'  // Violet
+        ];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Rocket {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX;
+                this.y = startY;
+                this.startX = startX;
+                this.startY = startY;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.distanceToTarget = Math.hypot(targetX - startX, targetY - startY);
+                this.distanceTraveled = 0;
+                this.coordinates = [];
+                this.coordinateCount = 3;
+                while (this.coordinateCount--) {
+                    this.coordinates.push([this.x, this.y]);
+                }
+                this.angle = Math.atan2(targetY - startY, targetX - startX);
+                this.speed = 2.5;
+                this.acceleration = 1.05;
+                this.brightness = Math.random() * 50 + 50;
+                this.color = RAINBOW_COLORS[Math.floor(Math.random() * RAINBOW_COLORS.length)];
+            }
+
+            update(index) {
+                this.coordinates.pop();
+                this.coordinates.unshift([this.x, this.y]);
+                this.speed *= this.acceleration;
+                const vx = Math.cos(this.angle) * this.speed;
+                const vy = Math.sin(this.angle) * this.speed;
+                this.distanceTraveled = Math.hypot(this.x - this.startX, this.y - this.startY);
+
+                if (this.distanceTraveled >= this.distanceToTarget) {
+                    createExplosion(this.targetX, this.targetY);
+                    rockets.splice(index, 1);
+                } else {
+                    this.x += vx;
+                    this.y += vy;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+                ctx.lineTo(this.x, this.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.coordinates = [];
+                this.coordinateCount = 5;
+                while (this.coordinateCount--) {
+                    this.coordinates.push([this.x, this.y]);
+                }
+                this.angle = Math.random() * Math.PI * 2;
+                this.speed = Math.random() * 10 + 1;
+                this.friction = 0.95;
+                this.gravity = 0.98;
+                this.color = color || RAINBOW_COLORS[Math.floor(Math.random() * RAINBOW_COLORS.length)];
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+
+            update(index) {
+                this.coordinates.pop();
+                this.coordinates.unshift([this.x, this.y]);
+                this.speed *= this.friction;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed + this.gravity;
+                this.alpha -= this.decay;
+
+                if (this.alpha <= this.decay) {
+                    particles.splice(index, 1);
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+                ctx.lineTo(this.x, this.y);
+                ctx.strokeStyle = `rgba(${hexToRgb(this.color)}, ${this.alpha})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '255, 255, 255';
+        }
+
+        function createExplosion(x, y) {
+            let particleCount = 70;
+            for (let i = 0; i < particleCount; i++) {
+                // Ensure 7 colors appear evenly in rainbow bursts
+                const color = RAINBOW_COLORS[i % RAINBOW_COLORS.length];
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function loopFireworks() {
+            requestAnimationFrame(loopFireworks);
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'lighter';
+
+            if (fireworksActive) {
+                let i = rockets.length;
+                while (i--) {
+                    rockets[i].draw();
+                    rockets[i].update(i);
+                }
+
+                let j = particles.length;
+                while (j--) {
+                    particles[j].draw();
+                    particles[j].update(j);
+                }
+
+                // Random continuous fireworks launch
+                if (Math.random() < 0.06) {
+                    const startX = Math.random() * canvas.width;
+                    const startY = canvas.height;
+                    const targetX = Math.random() * canvas.width;
+                    const targetY = Math.random() * (canvas.height * 0.5);
+                    rockets.push(new Rocket(startX, startY, targetX, targetY));
+                }
+            }
+        }
+
+        // Click anywhere to launch a explosion
+        window.addEventListener('click', (e) => {
+            // Avoid triggering fireworks if clicking inside input/button/vscode
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('#vscodeContainer')) return;
+            createExplosion(e.clientX, e.clientY);
+        });
+
+        function toggleFireworksState() {
+            fireworksActive = !fireworksActive;
+            const icon = document.getElementById('fireworksToggleIcon');
+            const text = document.getElementById('fireworksToggleText');
+
+            if (fireworksActive) {
+                icon.className = 'fa-solid fa-pause text-yellow-400';
+                text.textContent = 'Tạm Dừng Pháo Hoa';
+                notify('Đã tiếp tục hiệu ứng pháo hoa 7 sắc!');
+            } else {
+                icon.className = 'fa-solid fa-play text-emerald-400';
+                text.textContent = 'Bật Pháo Hoa';
+                notify('Đã tạm dừng pháo hoa.');
+            }
+        }
+
+        function triggerFireworksCelebration() {
+            fireworksActive = true;
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const targetX = Math.random() * canvas.width;
+                    const targetY = Math.random() * (canvas.height * 0.6);
+                    createExplosion(targetX, targetY);
+                }, i * 120);
+            }
+            notify('💥 Nổ Bùng Đại Tiệc Pháo Hoa 7 Sắc Cầu Vồng Hồ Bình Trọng! 🎉');
+        }
+
+        /* ==========================================================================
+           4. VS CODE STUDIO ULTRA PRO ENGINE & WORKSPACE
+           ========================================================================== */
+        const initialFiles = {
+            'main.py': {
+                name: 'main.py',
+                lang: 'Python 3.12',
+                icon: 'fa-brands fa-python text-yellow-400',
+                content: `# ====================================================\n# HỒ BÌNH TRỌNG - PYTHON SPECIALIST & VS CODE ARCHITECT\n# Trường Đại học Bình Dương (BDU) | An Giang\n# ====================================================\n\ndef greet_binhtrong():\n    name = "Hồ Bình Trọng"\n    school = "Trường Đại học Bình Dương (BDU)"\n    hometown = "An Giang"\n    strengths = "Tự tin giao tiếp, cởi mở, hòa nhập 100%"\n    \n    print(f"👋 Xin chào! Tôi là: {name}")\n    print(f"🎓 Học vấn: {school}")\n    print(f"📍 Quê quán: {hometown}")\n    print(f"⭐ Sở trường: {strengths}")\n\n# Tính toán đơn giản\nnumbers = [1, 2, 3, 4, 5]\nsquares = [x ** 2 for x in numbers]\nprint(f"📊 Bình phương danh sách: {squares}")\n\ngreet_binhtrong()`
+            },
+            'app.js': {
+                name: 'app.js',
+                lang: 'JavaScript',
+                icon: 'fa-brands fa-js text-yellow-300',
+                content: `// Hồ Bình Trọng - VS Code JavaScript Engine\nconsole.log("🚀 VS Code Studio Ultra Pro is Running!");\n\nconst profile = {\n    name: "Hồ Bình Trọng",\n    zalo: "0394472945",\n    email: "hobinhtrong168@gmail.com"\n};\n\nfunction showInfo() {\n    console.log(\`👤 Developer: \${profile.name}\`);\n    console.log(\`📱 Zalo: \${profile.zalo}\`);\n}\n\nshowInfo();`
+            },
+            'index.html': {
+                name: 'index.html',
+                lang: 'HTML5 Web',
+                icon: 'fa-brands fa-html5 text-orange-400',
+                content: `<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body {\n      background: #0f172a;\n      color: #38bdf8;\n      font-family: sans-serif;\n      text-align: center;\n      padding: 40px;\n    }\n    h1 { color: #f43f5e; }\n  </style>\n</head>\n<body>\n  <h1>HỒ BÌNH TRỌNG - HTML PREVIEW</h1>\n  <p>Chào mừng đến với Live Web Preview từ VS Code Studio Pro!</p>\n</body>\n</html>`
+            },
+            'algorithm.cpp': {
+                name: 'algorithm.cpp',
+                lang: 'C++',
+                icon: 'fa-solid fa-code text-blue-400',
+                content: `// Hồ Bình Trọng - C++ Algorithm Logic\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Ho Binh Trong - BDU Algorithm" << endl;\n    cout << "Communication level: 100%" << endl;\n    return 0;\n}`
+            }
+        };
+
+        let workspaceFiles = { ...initialFiles };
+        let activeFileName = 'main.py';
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        function renderFileTree() {
+            const container = document.getElementById('fileTreeContainer');
+            container.innerHTML = '';
+
+            Object.keys(workspaceFiles).forEach(fileName => {
+                const file = workspaceFiles[fileName];
+                const isActive = fileName === activeFileName;
+
+                const item = document.createElement('div');
+                item.className = `flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer transition-all ${isActive ? 'bg-slate-800/80 text-white font-bold border-l-2 border-cyan-400' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'}`;
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 truncate" onclick="selectWorkspaceFile('${fileName}')">
+                        <i class="${file.icon}"></i>
+                        <span class="truncate">${fileName}</span>
+                    </div>
+                    ${Object.keys(workspaceFiles).length > 1 ? `<button onclick="deleteWorkspaceFile('${fileName}', event)" title="Xóa file" class="opacity-0 hover:opacity-100 hover:text-red-400"><i class="fa-solid fa-xmark"></i></button>` : ''}
+                `;
+                container.appendChild(item);
+            });
+
+            renderEditorTabs();
+        }
+
+        function renderEditorTabs() {
+            const container = document.getElementById('editorTabsContainer');
+            container.innerHTML = '';
+
+            Object.keys(workspaceFiles).forEach(fileName => {
+                const file = workspaceFiles[fileName];
+                const isActive = fileName === activeFileName;
+
+                const tab = document.createElement('div');
+                tab.className = `flex items-center gap-2 px-3 py-2 border-r border-white/10 text-xs font-mono cursor-pointer select-none border-t-2 ${isActive ? 'bg-[var(--editor-bg)] text-white border-t-cyan-400 font-bold' : 'bg-slate-950/60 text-slate-500 border-t-transparent hover:text-slate-300'}`;
+                
+                tab.innerHTML = `
+                    <span onclick="selectWorkspaceFile('${fileName}')" class="flex items-center gap-1.5">
+                        <i class="${file.icon}"></i> ${fileName}
+                    </span>
+                `;
+                container.appendChild(tab);
+            });
+        }
+
+        function selectWorkspaceFile(fileName) {
+            if (!workspaceFiles[fileName]) return;
+            activeFileName = fileName;
+            
+            const textarea = document.getElementById('codeEditorTextarea');
+            textarea.value = workspaceFiles[fileName].content;
+            document.getElementById('statusBarLanguage').textContent = workspaceFiles[fileName].lang;
+
+            renderFileTree();
+            updateLineNumbers();
+        }
+
+        function updateCodeText(val) {
+            if (workspaceFiles[activeFileName]) {
+                workspaceFiles[activeFileName].content = val;
+            }
+        }
+
+        function updateLineNumbers() {
+            const textarea = document.getElementById('codeEditorTextarea');
+            const lineNumContainer = document.getElementById('lineNumbers');
+            const lines = textarea.value.split('\n').length;
+            
+            let lineNumsHTML = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumsHTML += `<div>${i}</div>`;
+            }
+            lineNumContainer.innerHTML = lineNumsHTML;
+        }
+
+        function addNewFilePrompt() {
+            const name = prompt('Nhập tên file mới (ví dụ: test.py, script.js):', 'new_script.py');
+            if (!name) return;
+
+            let icon = 'fa-solid fa-file text-slate-400';
+            let lang = 'Plain Text';
+
+            if (name.endsWith('.py')) { icon = 'fa-brands fa-python text-yellow-400'; lang = 'Python 3.12'; }
+            else if (name.endsWith('.js')) { icon = 'fa-brands fa-js text-yellow-300'; lang = 'JavaScript'; }
+            else if (name.endsWith('.html')) { icon = 'fa-brands fa-html5 text-orange-400'; lang = 'HTML5 Web'; }
+
+            workspaceFiles[name] = {
+                name,
+                lang,
+                icon,
+                content: `# File mới: ${name}\nprint("Tạo file thành công!")`
+            };
+
+            selectWorkspaceFile(name);
+            notify(`Đã tạo file workspace: ${name}`);
+        }
+
+        function deleteWorkspaceFile(fileName, e) {
+            e.stopPropagation();
+            if (Object.keys(workspaceFiles).length <= 1) {
+                notify('Không thể xóa file duy nhất còn lại!');
+                return;
+            }
+            if (confirm(`Bạn có chắc chắn muốn xóa file ${fileName}?`)) {
+                delete workspaceFiles[fileName];
+                const remaining = Object.keys(workspaceFiles)[0];
+                selectWorkspaceFile(remaining);
+                notify(`Đã xóa file: ${fileName}`);
+            }
+        }
+
+        function changeVSCodeTheme(themeClass) {
+            const ide = document.getElementById('vscodeContainer');
+            ide.className = `${themeClass} bg-[var(--editor-bg)] rounded-2xl border border-white/10 overflow-hidden shadow-2xl flex flex-col min-h-[620px] transition-all duration-300 relative`;
+            notify(`Đã đổi theme VS Code: ${themeClass}`);
+        }
+
+        function toggleVSCodeFullscreen() {
+            const ide = document.getElementById('vscodeContainer');
+            ide.classList.toggle('fixed');
+            ide.classList.toggle('inset-2');
+            ide.classList.toggle('z-50');
+            notify('Đã chuyển đổi chế độ xem VS Code');
+        }
+
+        /* Multi-Language Execution Engine */
+        function runVSCodeScript() {
+            const file = workspaceFiles[activeFileName];
+            if (!file) return;
+
+            switchTerminalTab('output');
+            const outputBody = document.getElementById('outputBody');
+            outputBody.innerHTML = `<div class="text-emerald-400 font-bold">[Running ${file.name}...]</div>`;
+
+            if (activeFileName.endsWith('.html')) {
+                // Open HTML Preview Panel
+                const panel = document.getElementById('htmlPreviewPanel');
+                const iframe = document.getElementById('htmlPreviewIframe');
+                panel.classList.remove('hidden');
+                iframe.srcdoc = file.content;
+                notify('Đã mở cửa sổ Live Preview HTML!');
+                return;
+            }
+
+            if (activeFileName.endsWith('.py')) {
+                // Simple Python Evaluator Simulation
+                setTimeout(() => {
+                    let logs = [];
+                    const lines = file.content.split('\n');
+                    
+                    lines.forEach(line => {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('print(')) {
+                            // Extract content inside print(...)
+                            let match = trimmed.match(/print\((.*)\)/);
+                            if (match && match[1]) {
+                                let content = match[1].trim();
+                                if (content.startsWith('f"') || content.startsWith("f'")) {
+                                    content = content.substring(2, content.length - 1)
+                                        .replace('{name}', currentProfile.name)
+                                        .replace('{school}', currentProfile.education)
+                                        .replace('{hometown}', currentProfile.hometown)
+                                        .replace('{strengths}', currentProfile.strengths)
+                                        .replace('{squares}', '[1, 4, 9, 16, 25]');
+                                } else if ((content.startsWith('"') && content.endsWith('"')) || (content.startsWith("'") && content.endsWith("'"))) {
+                                    content = content.substring(1, content.length - 1);
+                                }
+                                logs.push(content);
+                            }
+                        }
+                    });
+
+                    if (logs.length === 0) {
+                        logs.push("Python script executed successfully with 0 outputs.");
+                    }
+
+                    outputBody.innerHTML += logs.map(l => `<div class="text-slate-100">&gt; ${l}</div>`).join('');
+                    outputBody.innerHTML += `<div class="text-cyan-400 text-xs font-bold pt-2">[Process finished with exit code 0]</div>`;
+                    
+                    // Duplicate output in Terminal
+                    printTerminalLog(`[Python Executed ${file.name}]`, 'cyan');
+                    logs.forEach(l => printTerminalLog(`  ${l}`, 'white'));
+                }, 300);
+            } else if (activeFileName.endsWith('.js')) {
+                setTimeout(() => {
+                    outputBody.innerHTML += `<div class="text-slate-100">&gt; 🚀 VS Code Studio Ultra Pro is Running!</div>`;
+                    outputBody.innerHTML += `<div class="text-slate-100">&gt; 👤 Developer: ${currentProfile.name}</div>`;
+                    outputBody.innerHTML += `<div class="text-slate-100">&gt; 📱 Zalo: ${currentProfile.phone}</div>`;
+                    outputBody.innerHTML += `<div class="text-cyan-400 text-xs font-bold pt-2">[Node.js Process finished with exit code 0]</div>`;
+                }, 300);
+            } else {
+                outputBody.innerHTML += `<div class="text-slate-300">&gt; Compiled & executed ${file.name} successfully!</div>`;
+            }
+        }
+
+        function closeHTMLPreview() {
+            document.getElementById('htmlPreviewPanel').classList.add('hidden');
+        }
+
+        /* Terminal Shell Logic & Interactive Bash Commands */
+        function switchTerminalTab(tab) {
+            const termBody = document.getElementById('terminalBody');
+            const outBody = document.getElementById('outputBody');
+            const btnTerm = document.getElementById('term-tab-btn-terminal');
+            const btnOut = document.getElementById('term-tab-btn-output');
+
+            if (tab === 'terminal') {
+                termBody.classList.remove('hidden');
+                outBody.classList.add('hidden');
+                btnTerm.className = 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-0.5 flex items-center gap-1.5';
+                btnOut.className = 'text-slate-400 hover:text-slate-200 pb-0.5 flex items-center gap-1.5';
+            } else {
+                termBody.classList.add('hidden');
+                outBody.classList.remove('hidden');
+                btnOut.className = 'text-cyan-400 font-bold border-b-2 border-cyan-400 pb-0.5 flex items-center gap-1.5';
+                btnTerm.className = 'text-slate-400 hover:text-slate-200 pb-0.5 flex items-center gap-1.5';
+            }
+        }
+
+        function printTerminalLog(text, color = 'slate') {
+            const container = document.getElementById('terminalLogContainer');
+            const line = document.createElement('div');
+            
+            const colorMap = {
+                cyan: 'text-cyan-400',
+                emerald: 'text-emerald-400',
+                yellow: 'text-yellow-400',
+                purple: 'text-purple-400',
+                red: 'text-red-400',
+                white: 'text-slate-100',
+                slate: 'text-slate-300'
+            };
+
+            line.className = `${colorMap[color] || 'text-slate-300'} font-mono text-xs leading-relaxed`;
+            line.innerHTML = text;
+            container.appendChild(line);
+
+            const body = document.getElementById('terminalBody');
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function handleTerminalKeyDown(e) {
+            const input = document.getElementById('terminalInput');
+
+            if (e.key === 'Enter') {
+                const cmd = input.value.trim();
+                if (cmd) {
+                    printTerminalLog(`<span class="text-emerald-400 font-bold">binhtrong@BDU-studio:~$</span> ${cmd}`, 'white');
+                    commandHistory.push(cmd);
+                    historyIndex = commandHistory.length;
+                    runTerminalCommand(cmd);
+                }
+                input.value = '';
+            } else if (e.key === 'ArrowUp') {
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    input.value = '';
+                }
+            }
+        }
+
+        function runTerminalCommand(cmdStr) {
+            const parts = cmdStr.trim().split(' ');
+            const mainCmd = parts[0].toLowerCase();
+            const arg = parts.slice(1).join(' ');
+
+            switch (mainCmd) {
+                case 'help':
+                    printTerminalLog('📜 Các câu lệnh được hỗ trợ:', 'yellow');
+                    printTerminalLog('  • python3 <file> / python <file> : Thực thi mã Python');
+                    printTerminalLog('  • node <file>                  : Thực thi mã JavaScript');
+                    printTerminalLog('  • ls                            : Liệt kê file trong Workspace');
+                    printTerminalLog('  • cat <file>                    : Xem nội dung file');
+                    printTerminalLog('  • clear                         : Xóa màn hình Terminal');
+                    printTerminalLog('  • echo <thông điệp>             : In thông điệp ra màn hình');
+                    printTerminalLog('  • pwd                           : Xem đường dẫn hiện tại');
+                    printTerminalLog('  • whoami                        : Thông tin người dùng');
+                    printTerminalLog('  • date                          : Xem ngày giờ hệ thống');
+                    printTerminalLog('  • pip install <gói>            : Giả lập cài đặt thư viện Python');
+                    printTerminalLog('  • neofetch                      : Hiển thị Logo BinhTrong OS & BDU Specs');
+                    printTerminalLog('  • matrix                        : Bật hiệu ứng dòng mưa Cyberpunk');
+                    break;
+
+                case 'python3':
+                case 'python':
+                    if (arg) {
+                        if (workspaceFiles[arg]) {
+                            selectWorkspaceFile(arg);
+                            runVSCodeScript();
+                        } else {
+                            printTerminalLog(`python3: error: file '${arg}' not found in workspace`, 'red');
+                        }
+                    } else {
+                        printTerminalLog('Python 3.12.0 (main, BDU Edition) [GCC 11.2.0]', 'cyan');
+                        printTerminalLog('Gõ python3 main.py để chạy file script.', 'slate');
+                    }
+                    break;
+
+                case 'node':
+                    if (arg && workspaceFiles[arg]) {
+                        selectWorkspaceFile(arg);
+                        runVSCodeScript();
+                    } else {
+                        printTerminalLog('node: specify a file (e.g., node app.js)', 'yellow');
+                    }
+                    break;
+
+                case 'ls':
+                    const files = Object.keys(workspaceFiles).join('   ');
+                    printTerminalLog(`📂 Workspace Files:\n   ${files}`, 'emerald');
+                    break;
+
+                case 'cat':
+                    if (arg && workspaceFiles[arg]) {
+                        printTerminalLog(`--- ${arg} ---`, 'cyan');
+                        printTerminalLog(workspaceFiles[arg].content.replace(/\n/g, '<br/>'), 'white');
+                    } else {
+                        printTerminalLog(`cat: ${arg || 'file'}: No such file`, 'red');
+                    }
+                    break;
+
+                case 'clear':
+                    document.getElementById('terminalLogContainer').innerHTML = '';
+                    break;
+
+                case 'pwd':
+                    printTerminalLog('/home/binhtrong/BDU-workspace', 'cyan');
+                    break;
+
+                case 'whoami':
+                    printTerminalLog(`${currentProfile.name} (Sinh viên Đại Học Bình Dương - An Giang)`, 'purple');
+                    break;
+
+                case 'date':
+                    printTerminalLog(new Date().toString(), 'emerald');
+                    break;
+
+                case 'echo':
+                    printTerminalLog(arg || '', 'white');
+                    break;
+
+                case 'pip':
+                    if (parts[1] === 'install' && parts[2]) {
+                        const pkg = parts[2];
+                        printTerminalLog(`[pip] Downloading & Installing ${pkg}...`, 'cyan');
+                        let progress = 0;
+                        const interval = setInterval(() => {
+                            progress += 25;
+                            const bar = '█'.repeat(progress / 5) + '░'.repeat((100 - progress) / 5);
+                            printTerminalLog(`Installing ${pkg} [${bar}] ${progress}%`, 'rainbow-text');
+                            if (progress >= 100) {
+                                clearInterval(interval);
+                                printTerminalLog(`Successfully installed ${pkg}-2026.1.0 in BDU Environment!`, 'emerald');
+                            }
+                        }, 250);
+                    } else {
+                        printTerminalLog('Usage: pip install <package_name>', 'yellow');
+                    }
+                    break;
+
+                case 'neofetch':
+                    const ascii = `
+ <span class="rainbow-text">   /\_/\    </span>   <span class="text-cyan-400 font-bold">OS:</span> BinhTrong OS v2026.1 (BDU Edition)
+ <span class="rainbow-text">  ( o.o )   </span>   <span class="text-cyan-400 font-bold">Host:</span> Hồ Bình Trọng Studio Workstation
+ <span class="rainbow-text">   > ^ <    </span>   <span class="text-cyan-400 font-bold">Kernel:</span> Python Specialist 3.12
+               <span class="text-cyan-400 font-bold">University:</span> Đại Học Bình Dương (BDU)
+               <span class="text-cyan-400 font-bold">Hometown:</span> An Giang
+               <span class="text-cyan-400 font-bold">Communication Skill:</span> 100% Friendly & Active
+                    `;
+                    printTerminalLog(ascii, 'white');
+                    break;
+
+                case 'matrix':
+                    toggleTerminalMatrix();
+                    printTerminalLog('⚡ Cyberpunk Digital Rain Effect Activated in Terminal!', 'emerald');
+                    break;
+
+                default:
+                    printTerminalLog(`Command not found: ${mainCmd}. Gõ 'help' để xem danh sách lệnh.`, 'red');
+            }
+        }
+
+        /* Matrix Digital Rain Effect inside Terminal */
+        let matrixInterval = null;
+        function toggleTerminalMatrix() {
+            const matrixCanvas = document.getElementById('terminal-matrix-canvas');
+            if (matrixCanvas.style.display === 'block') {
+                matrixCanvas.style.display = 'none';
+                clearInterval(matrixInterval);
+                return;
+            }
+
+            matrixCanvas.style.display = 'block';
+            const mCtx = matrixCanvas.getContext('2d');
+            matrixCanvas.width = matrixCanvas.parentElement.clientWidth;
+            matrixCanvas.height = matrixCanvas.parentElement.clientHeight;
+
+            const chars = '01BINHTRONGPYTHONBDU2026';
+            const fontSize = 12;
+            const columns = Math.floor(matrixCanvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+
+            matrixInterval = setInterval(() => {
+                mCtx.fillStyle = 'rgba(15, 23, 42, 0.1)';
+                mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+                mCtx.fillStyle = '#00f0ff';
+                mCtx.font = `${fontSize}px monospace`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    mCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }, 40);
+
+            setTimeout(() => {
+                matrixCanvas.style.display = 'none';
+                clearInterval(matrixInterval);
+            }, 8000);
+        }
+
+        /* ==========================================================================
+           5. AI COPILOT ASSISTANT IN VS CODE
+           ========================================================================== */
+        function toggleAICopilot() {
+            const drawer = document.getElementById('aiCopilotDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function askAIPreset(type) {
+            let promptText = '';
+            if (type === 'explain') promptText = `Giải thích đoạn mã ${activeFileName} giúp tôi.`;
+            else if (type === 'generate') promptText = `Tạo giúp tôi hàm Python tính số Fibonacci.`;
+            else if (type === 'fix') promptText = `Kiểm tra xem file ${activeFileName} có lỗi logic không?`;
+
+            document.getElementById('aiInputText').value = promptText;
+            sendAICopilotMessage();
+        }
+
+        function sendAICopilotMessage() {
+            const input = document.getElementById('aiInputText');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const chatHistory = document.getElementById('aiChatHistory');
+
+            // Append User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'p-2.5 rounded-2xl bg-slate-800 text-slate-100 text-right ml-6 font-sans';
+            userMsg.textContent = msg;
+            chatHistory.appendChild(userMsg);
+
+            input.value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Simulated AI Response
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'p-3 rounded-2xl bg-purple-900/30 border border-purple-500/30 text-purple-200 space-y-2 font-sans';
+                
+                let answer = '';
+                if (msg.includes('Giải thích')) {
+                    answer = `🤖 **AI Response:** File \`${activeFileName}\` được viết rất mạch lạc! Đã khai báo thông tin cá nhân của Hồ Bình Trọng (ĐH Bình Dương - BDU) và cấu trúc hàm chuyên nghiệp.`;
+                } else if (msg.includes('Fibonacci') || msg.includes('Python')) {
+                    answer = `🤖 **Mã Python Fibonacci:**\n\`\`\`python\ndef fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        yield a\n        a, b = b, a + b\n\nprint(list(fibonacci(10)))\n\`\`\``;
+                } else {
+                    answer = `🤖 **AI Copilot:** Tôi đã phân tích file \`${activeFileName}\`. Mã nguồn sẵn sàng thực thi với hiệu suất cao!`;
+                }
+
+                aiMsg.innerHTML = answer.replace(/\n/g, '<br/>');
+                chatHistory.appendChild(aiMsg);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }, 600);
+        }
+
+        /* ==========================================================================
+           6. HELPER UTILITIES & TOAST NOTIFICATIONS
+           ========================================================================== */
+        function copyToClipboard(text, successMsg) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            notify(successMsg || 'Đã sao chép vào bộ nhớ tạm!');
+        }
+
+        function notify(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'glass-panel px-4 py-3 rounded-2xl text-xs font-bold text-white shadow-2xl border border-cyan-500/40 flex items-center gap-2 transform transition-all duration-300 translate-x-10 opacity-0';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-cyan-400"></i> <span>${msg}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-10', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            notify('💥 Đã gửi tin nhắn đến Hồ Bình Trọng thành công!');
+            e.target.reset();
+        }
+
+        /* ==========================================================================
+           7. APP INITIALIZATION ON WINDOW LOAD
+           ========================================================================== */
+        window.onload = function() {
+            // Update profile content from LocalStorage or Defaults
+            updateProfileUI();
+
+            // Start typing animation loop
+            runTypingLoop();
+
+            // Initialize Fireworks Animation Engine
+            loopFireworks();
+
+            // Initialize VS Code Studio Engine
+            selectWorkspaceFile('main.py');
+            updateLineNumbers();
+
+            // Welcome Terminal Logs
+            printTerminalLog('🚀 BinhTrong OS [Version 2026.1] System Ready.', 'cyan');
+            printTerminalLog(`👋 Chào mừng đến với Workspace của Hồ Bình Trọng (BDU - An Giang).`, 'emerald');
+            printTerminalLog(`Gõ 'help' để xem danh sách câu lệnh Terminal tương tác.`, 'yellow');
+
+            console.log("Hồ Bình Trọng Profile Web Application initialized successfully.");
+        };
+    </script>
+</body>
+</html>
